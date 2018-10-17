@@ -186,6 +186,7 @@ public class Practice05Test {
 			}
 			catch (Exception e) {
 				System.out.println("Unable to instantiate sorting algorithm " + algo);
+				System.out.println(e);
 			}
 		}
 	}
