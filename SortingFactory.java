@@ -29,7 +29,7 @@ public class SortingFactory {
 			return new MergeSort();
 		}
 		if (lowercaseAlgoName.contains("hybrid")) {
-			return new QuickSort();
+			return new HybridSorting();
 		}
 		
 		// Invalid algorithm name specified. Use default?

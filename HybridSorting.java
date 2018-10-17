@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class HybridSorting {
 
 	public static void main(String[] args) {
-		int[] arr = new int[] {5, 2, 3, 1, 3, 5, 2, 0, 6, 7};
+		int[] arr = new int[] {5, 2, 3, 1, 3, 5, 2, 0, 6, 7, 8};
 		//System.out.println("Starting Array: " + Arrays.toString(arr));
 		sort(arr, 3);	
 		//System.out.println("Ending Array: " + Arrays.toString(arr));
@@ -19,7 +19,8 @@ public class HybridSorting {
 		//System.out.println("Old Runs: " + runIndex);
 		System.out.println("New Runs: " + newRuns);
 		System.out.println("Starting Array: " + Arrays.toString(arr));
-		mergeSort(arr, newRuns, newRuns.get(0), newRuns.size() - 1);
+		//mergeSort(arr, newRuns, newRuns.get(0), newRuns.size() - 1);
+		mergeSort(arr, newRuns);
 		System.out.println("Ending Array: " + Arrays.toString(arr));
 	}
 	
@@ -74,7 +75,7 @@ public class HybridSorting {
 		}
 		return newIndexes;
 	}
-
+	/*
 	public static void mergeSort(int[] arr, ArrayList<Integer> runIndex, int leftIndex, int rightIndex) {
 		if (rightIndex <= leftIndex) {
 			return;
@@ -83,10 +84,28 @@ public class HybridSorting {
 		int midPoint = (leftIndex + rightIndex) / 2;	
 		mergeSort(arr, runIndex, leftIndex, midPoint);
 		mergeSort(arr, runIndex, midPoint + 1, rightIndex);
+		System.out.println("Left: " + leftIndex);
+		System.out.println("Left Index: " + runIndex.get(leftIndex));
+		System.out.println("Right: " + rightIndex);
+		System.out.println("Right Index: " + runIndex.get(rightIndex));
+		System.out.println("MidPoint: " + midPoint);
+		System.out.println("Mid Index: " + runIndex.get(midPoint));
 		merge(arr, runIndex, runIndex.get(midPoint), runIndex.get(leftIndex), runIndex.get(rightIndex));
 	}
-	public static void merge(int[] arr, ArrayList<Integer> runIndex, int mid, int left, int right) {
-		merge(left, Arrays.copyOfRange(arr, left, mid + 1), Arrays.copyOfRange(arr, mid + 1, right + 1), arr);
+	*/
+	
+	public static void mergeSort(int[] arr, ArrayList<Integer> runIndex) {
+		while (runIndex.size() > 2) {
+			for (int i = 0; i < runIndex.size() - 1; i++) {
+				merge(arr, runIndex.get(i), runIndex.get(i + 1), runIndex.get(i + 1), runIndex.get(i + 2));
+				runIndex.remove(i + 1);
+				i++;
+			}
+		}
+		merge(arr, runIndex.get(0), runIndex.get(1), runIndex.get(1), arr.length);
+	}
+	public static void merge(int[] arr, int left, int leftEnd, int right, int rightEnd) {
+		merge(left, Arrays.copyOfRange(arr, left, leftEnd), Arrays.copyOfRange(arr, right, rightEnd), arr);
 	}
 	public static void merge(int left, int[] leftArr, int[] rightArr, int[] a) {
 		int leftCount = 0, rightCount = 0, target = left;
