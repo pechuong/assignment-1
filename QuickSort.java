@@ -24,15 +24,15 @@ public class QuickSort {
 		}
 	}
 	public static int partition(int[] a, int left, int right) {
-		int pivot = (int)(Math.random() * right + left);
+		int pivot = right;
 		int i = left;
 		int k = right;
 
-		while (i < pivot && k > pivot) {
-			while (i < right && a[i] <= a[pivot]) {
+		while (i < k) {
+			while (i < k && a[i] <= a[pivot]) {
 				i++;
 			}
-			while (k >= i && a[k] > a[pivot]) {
+			while (k > i && a[k] > a[pivot]) {
 				k--;
 			}
 			if (i < k) {
