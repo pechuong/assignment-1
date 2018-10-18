@@ -110,10 +110,12 @@ public class Practice05Test {
 	 * Checks whether the array is sorted.
 	 * @return true if sorted; false otherwise.
 	 */
-	protected boolean isSorted(int [] arr) {
+	protected static boolean isSorted(int [] arr) {
 		for (int i = 0; i < arr.length-1; i++) {
-			if (arr[i] > arr[i+1])
+			if (arr[i] > arr[i+1]) {
+				System.out.println(arr[i + 1]);
 				return false;
+			}
 		}
 		return true;
 	}

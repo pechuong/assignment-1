@@ -4,13 +4,15 @@ import java.util.ArrayList;
 public class HybridSorting implements SortingAlgorithm {
 	
 	public void sort(int[] a) {
-		sort(a, 16);
+		sort(a, 6);
 	}
 
 	public static void sort(int[] arr, int run_size) {
 		ArrayList<Integer> runIndex = findRuns(arr, run_size);	
-		ArrayList<Integer> newRuns = sortNonRuns(arr, runIndex, run_size);	
-		mergeSort(arr, newRuns);
+		//System.out.println("Run Index: " + runIndex);
+		//ArrayList<Integer> newRuns = sortNonRuns(arr, runIndex, run_size);	
+		mergeSort(arr, runIndex);
+		//System.out.println(Arrays.toString(arr));
 	}
 	
 	/**
@@ -23,54 +25,85 @@ public class HybridSorting implements SortingAlgorithm {
 	public static ArrayList<Integer> findRuns(int[] arr, int run_size) {
 		ArrayList<Integer> runIndexes = new ArrayList<>();
 		int count = 1;
-		for (int i = 0; i < arr.length - run_size +1; i++) {
-			if (count == run_size) {
-				runIndexes.add(i);
-				i += count;
-				break;
-			}
-			if (arr[i] < arr[i+1]) {
-				count++;
-			} else {
-				count = 1;
-				break;
-			}
-			
-		} /* e-for */
+		int prev = 0;
+		int sortViewCount = 0;
+		try {
+			for (int i = 0; i < arr.length - 1; i++) {
+				if (arr[i] < arr[i+1]) {
+					count++;
+				} else {
+					count = 1;
+					continue;
+				}
+				if (count == run_size) {
+					sortNonRun(arr, prev, i - run_size + 1);
+					runIndexes.add(prev);
+					runIndexes.add(i - run_size + 2);
+					prev = i + 2;
+					i++;
+					count = 1;
+				}
+
+			} /* e-for */
+			runIndexes.add(prev);
+			QuickSort.sort(arr, prev, arr.length - 1);
+		} catch (Exception e) {
+			System.out.println("Error in findRuns");
+			System.out.println(e);
+		}
+		if (runIndexes.size() == 0) {
+			QuickSort.sort(arr, 0, arr.length - 1);
+		}
 		return runIndexes;
 	}
 
-	
-	public static ArrayList<Integer> sortNonRuns(int[] arr, ArrayList<Integer> runIndexes, int run_size) {
-		if (runIndexes.size() == 0) {
-			QuickSort.sort(arr, 0, arr.length - 1);
-			return new ArrayList<>();
-		}	
-		ArrayList<Integer> newIndexes = new ArrayList<>();
-		newIndexes.addAll(runIndexes);
-		if (runIndexes.get(0) != 0) {
-			QuickSort.sort(arr, 0, runIndexes.get(0) -1);
-			newIndexes.add(0, 0);
-		}
-		for (int i = 1; i < runIndexes.size() - 1; i++) {
-			QuickSort.sort(arr, runIndexes.get(i) + run_size, runIndexes.get(i + 1) - 1); 
-			newIndexes.add(i + 2, runIndexes.get(i) + run_size);
-		}
-		return newIndexes;
-	}
+	public static void sortNonRun(int[] arr, int prev, int curr) {
+		QuickSort.sort(arr, prev, curr);
+		
+	}	
 	
 	public static void mergeSort(int[] arr, ArrayList<Integer> runIndex) {
+		boolean odd = false;
+		int odd_value = 0;
 		if (runIndex.isEmpty()) {
 			return;
 		}
-		while (runIndex.size() > 2) {
-			for (int i = 0; i < runIndex.size() - 1; i++) {
-				merge(arr, runIndex.get(i), runIndex.get(i + 1), runIndex.get(i + 1), runIndex.get(i + 2));
-				runIndex.remove(i + 1);
-				i++;
-			}
+		if (runIndex.size() % 2 == 1) {
+			odd = true;	
+			odd_value = runIndex.remove(runIndex.size() - 1);
 		}
-		merge(arr, runIndex.get(0), runIndex.get(1), runIndex.get(1), arr.length);
+		try {
+			/*
+			while (runIndex.size() > 2) {
+				for (int i = 0; i < runIndex.size() - 1; i++) {
+					merge(arr, runIndex.get(i), runIndex.get(i + 1), runIndex.get(i + 1), runIndex.get(i + 2));
+					runIndex.remove(i + 1);
+					i++;
+				}
+			}
+			*/
+			while (runIndex.size() > 2) {
+				for (int i = 0; i < runIndex.size() - 2; i++) {
+					merge(arr, runIndex.get(i), runIndex.get(i + 1), runIndex.get(i + 1), runIndex.get(i + 2));
+					//System.out.println("First Array: " + Arrays.toString(Arrays.copyOfRange(arr, runIndex.get(i), runIndex.get(i + 1))));
+					//System.out.println("Second Array: " + Arrays.toString(Arrays.copyOfRange(arr, runIndex.get(i + 1), runIndex.get(i + 2))));
+					//System.out.println("Final Array: " + Arrays.toString(Arrays.copyOfRange(arr, 0, runIndex.get(i + 2))));
+					//System.out.println("Final sorted = " + Practice05Test.isSorted(Arrays.copyOfRange(arr, 0, runIndex.get(i + 2))));
+					
+					runIndex.remove(i + 1);
+					i++;
+				}
+			}
+			if (odd) {
+				merge(arr, runIndex.get(0), runIndex.get(1), runIndex.get(1), odd_value);
+				merge(arr, runIndex.get(0), odd_value, odd_value, arr.length);
+			} else {
+				merge(arr, runIndex.get(0), runIndex.get(1), runIndex.get(1), arr.length);
+			}
+		} catch (Exception e) {
+			System.out.println("Error in mergeSort");
+			System.out.println(e);
+		}
 	}
 	public static void merge(int[] arr, int left, int leftEnd, int right, int rightEnd) {
 		merge(left, Arrays.copyOfRange(arr, left, leftEnd), Arrays.copyOfRange(arr, right, rightEnd), arr);
