@@ -3,7 +3,9 @@ import java.util.ArrayList;
 
 public class HybridSorting2 implements SortingAlgorithm {
 
-
+	public void sort(int[] a) {
+		sort(a, 3);
+	}
 
 	public static void sort(int[] arr, int run_size) {
 		ArrayList<Integer> runIndex = findRuns(arr, run_size);	

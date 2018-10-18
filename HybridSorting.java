@@ -84,15 +84,17 @@ public class HybridSorting implements SortingAlgorithm {
 			*/
 			while (runIndex.size() > 2) {
 				for (int i = 0; i < runIndex.size() - 2; i++) {
+					System.out.println("First Array: " + Arrays.toString(Arrays.copyOfRange(arr, runIndex.get(i), runIndex.get(i + 1))));
+					System.out.println("Second Array: " + Arrays.toString(Arrays.copyOfRange(arr, runIndex.get(i + 1), runIndex.get(i + 2))));
 					merge(arr, runIndex.get(i), runIndex.get(i + 1), runIndex.get(i + 1), runIndex.get(i + 2));
-					//System.out.println("First Array: " + Arrays.toString(Arrays.copyOfRange(arr, runIndex.get(i), runIndex.get(i + 1))));
-					//System.out.println("Second Array: " + Arrays.toString(Arrays.copyOfRange(arr, runIndex.get(i + 1), runIndex.get(i + 2))));
-					//System.out.println("Final Array: " + Arrays.toString(Arrays.copyOfRange(arr, 0, runIndex.get(i + 2))));
-					//System.out.println("Final sorted = " + Practice05Test.isSorted(Arrays.copyOfRange(arr, 0, runIndex.get(i + 2))));
+					System.out.println("Final Array: " + Arrays.toString(Arrays.copyOfRange(arr, 0, runIndex.get(i + 2))));
+					System.out.println("Final sorted = " + Practice05Test.isSorted(Arrays.copyOfRange(arr, 0, runIndex.get(i + 2))));
 					
 					runIndex.remove(i + 1);
 					i++;
+					break;
 				}
+				break;
 			}
 			if (odd) {
 				merge(arr, runIndex.get(0), runIndex.get(1), runIndex.get(1), odd_value);
