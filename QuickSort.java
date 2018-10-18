@@ -23,7 +23,27 @@ public class QuickSort {
 			quickSort(a, pivot + 1, right);
 		}
 	}
+	public static int partition(int[] a, int left, int right) {
+		int pivot = (int)(Math.random() * right + left);
+		int i = left;
+		int k = right;
 
+		while (i < pivot && k > pivot) {
+			while (i < right && a[i] <= a[pivot]) {
+				i++;
+			}
+			while (k >= i && a[k] > a[pivot]) {
+				k--;
+			}
+			if (i < k) {
+				swap(a, i, k);
+			}
+		}
+		swap(a, pivot, k);
+		return k;
+		
+	}
+	/*
 	public static int partition(int[] a, int left, int right) {
 		int pivot = left;
 		int i = left + 1;
@@ -44,7 +64,7 @@ public class QuickSort {
 		return k;
 		
 	}
-
+	*/
 	static void swap(int[] a, int index1, int index2) {
 		int temp = a[index1];
 		a[index1] = a[index2];
