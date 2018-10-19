@@ -1,14 +1,11 @@
-import java.util.Arrays;
 
-public class QuickSort {
+public class QuickSort /*implements SortingAlgorithm*/ {
 
 	/*
-	public static void main(String[] args) {
-		int[] test = new int[] {3, 5, 1, 2, 4};
-		System.out.println("Beginning Array: " + Arrays.toString(test));
-		sort(test);
-		System.out.println("Ending Array: " + Arrays.toString(test));
-
+	@Override
+	public void sort(int[] a) {
+		// TODO Auto-generated method stub
+		sort(a, 0, a.length-1);
 	}
 	*/
 
@@ -16,59 +13,32 @@ public class QuickSort {
 		quickSort(a, left, right);
 	}
 	
-	public static void quickSort(int[] a, int left, int right) {
-		if (left < right) {
-			int pivot = partition(a, left, right);
-			quickSort(a, left, pivot - 1);
-			quickSort(a, pivot + 1, right);
+	//helper method
+	public static void quickSort(int a[], int bot, int top) {
+		if (bot < top) {
+			int pi = partition(a, bot, top);
+			quickSort(a, bot, pi-1);
+			quickSort(a, pi+1, top);
 		}
 	}
-	public static int partition(int[] a, int left, int right) {
-		int pivot = right;
-		int i = left;
-		int k = right;
+	
+	static int partition(int[] a, int bot, int top) {
+		int i = (bot - 1);
+		int pivot = a[top];
 
-		while (i < k) {
-			while (i < k && a[i] <= a[pivot]) {
+		for (int j=bot; j<top; j++) {
+			if (a[j] <= pivot) {
 				i++;
-			}
-			while (k > i && a[k] > a[pivot]) {
-				k--;
-			}
-			if (i < k) {
-				swap(a, i, k);
+				int tmp = a[i];
+				a[i] = a[j];
+				a[j] = tmp;
 			}
 		}
-		swap(a, pivot, k);
-		return k;
+		int tmp = a[i+1];
+		a[i+1] = a[top];
+		a[top] = tmp;
 		
-	}
-	/*
-	public static int partition(int[] a, int left, int right) {
-		int pivot = left;
-		int i = left + 1;
-		int k = right;
-
-		while (i < k) {
-			while (i < right && a[i] <= a[pivot]) {
-				i++;
-			}
-			while (k >= i && a[k] > a[pivot]) {
-				k--;
-			}
-			if (i < k) {
-				swap(a, i, k);
-			}
-		}
-		swap(a, pivot, k);
-		return k;
-		
-	}
-	*/
-	static void swap(int[] a, int index1, int index2) {
-		int temp = a[index1];
-		a[index1] = a[index2];
-		a[index2] = temp;
+		return i+1;
 	}
 
 }

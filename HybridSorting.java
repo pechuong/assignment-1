@@ -3,22 +3,25 @@ import java.util.ArrayList;
 
 public class HybridSorting implements SortingAlgorithm {
 	
-	/*
+	/*	
 	public static void main(String[] args) {
-		int[] arr = new int[] {1, 3, 5, 7, 2, 4, 6, 8, 9, 0, 5};
+		int[] arr = new int[] {1, 3, 5, 2, 4, 6, 8, 9, 0, 5, 10, 2, 6, 4, 3, 7, 8};
+		//int[] arr = new int[] {0, 1,2, 3,4, 5,6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 		System.out.println("Begin Array: " + Arrays.toString(arr));
-		sort(arr, 3);
+		sort(arr, 16);
 		System.out.println("Ending Array: " + Arrays.toString(arr));
 	}
 	*/
-
 	public void sort(int[] a) {
-		sort(a, 6);
+		sort(a, 16);
 	}
 
 	public static void sort(int[] arr, int run_size) {
 		ArrayList<Integer> runIndex = findRuns(arr, run_size);	
 		//System.out.println("Run Index: " + runIndex);
+		//System.out.println("Run Index size: " + runIndex.size());
+		//System.out.println("Run Index: " + runIndex);
+
 		//ArrayList<Integer> newRuns = sortNonRuns(arr, runIndex, run_size);	
 		mergeSort(arr, runIndex);
 		//System.out.println(Arrays.toString(arr));
@@ -35,38 +38,36 @@ public class HybridSorting implements SortingAlgorithm {
 		ArrayList<Integer> runIndexes = new ArrayList<>();
 		int count = 1;
 		int prev = 0;
-		try {
-			for (int i = 0; i < arr.length - 1; i++) {
-				if (arr[i] < arr[i+1]) {
-					count++;
-				} else {
-					count = 1;
-					continue;
-				}
-				if (count == run_size) {
-					sortNonRun(arr, prev, i - run_size + 1);
-					if (prev == (i - run_size + 2)) {
-						runIndexes.add(prev);
-					} else {
-						runIndexes.add(prev);
-						runIndexes.add(i - run_size + 2);
-					}
-					prev = i + 2;
-					i++;
-					count = 1;
-				}
-
-			} /* e-for */
-			if (prev >= arr.length) {
-				prev = arr.length;
+		
+		for (int i = 0; i < arr.length - 2; i++) {
+			if (arr[i] < arr[i+1]) {
+				count++;
+			} else {
+				count = 1;
+				continue;
 			}
+			if (count == run_size) {
+				
+				sortNonRun(arr, prev, i - run_size + 1);
+				if (prev == (i - run_size + 2)) {
+					runIndexes.add(prev);
+				} else {
+					runIndexes.add(prev);
+					runIndexes.add(i - run_size + 2);
+				}
+				prev = i + 2;
+				i++;
+				count = 1;
+			}
+
+		} /* e-for */
+		if (prev >= arr.length) {
+			prev = arr.length - 1;
+		}
+		if (runIndexes.size() != 0) {
 			runIndexes.add(prev);
 			QuickSort.sort(arr, prev, arr.length - 1);
-		} catch (Exception e) {
-			System.out.println("Error in findRuns");
-			System.out.println(e);
-		}
-		if (runIndexes.size() == 0) {
+		} else {
 			QuickSort.sort(arr, 0, arr.length - 1);
 		}
 		return runIndexes;
@@ -107,7 +108,6 @@ public class HybridSorting implements SortingAlgorithm {
 				//	System.out.println("Final sorted = " + Practice05Test.isSorted(Arrays.copyOfRange(arr, 0, runIndex.get(i + 2))));
 					
 					runIndex.remove(i + 1);
-					//System.out.println("Run Index: " + runIndex);
 				}
 			}
 			if (odd) {
