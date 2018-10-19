@@ -17,14 +17,8 @@ public class HybridSorting implements SortingAlgorithm {
 	}
 
 	public static void sort(int[] arr, int run_size) {
-		ArrayList<Integer> runIndex = findRuns(arr, run_size);	
-		//System.out.println("Run Index: " + runIndex);
-		//System.out.println("Run Index size: " + runIndex.size());
-		//System.out.println("Run Index: " + runIndex);
-
-		//ArrayList<Integer> newRuns = sortNonRuns(arr, runIndex, run_size);	
+		ArrayList<Integer> runIndex = findRuns(arr, run_size);
 		mergeSort(arr, runIndex);
-		//System.out.println(Arrays.toString(arr));
 	}
 	
 	/**
@@ -59,17 +53,19 @@ public class HybridSorting implements SortingAlgorithm {
 				i++;
 				count = 1;
 			}
+		}
 
-		} /* e-for */
 		if (prev >= arr.length) {
 			prev = arr.length - 1;
 		}
+		
 		if (runIndexes.size() != 0) {
 			runIndexes.add(prev);
 			QuickSort.sort(arr, prev, arr.length - 1);
 		} else {
 			QuickSort.sort(arr, 0, arr.length - 1);
 		}
+		
 		return runIndexes;
 	}
 
@@ -79,50 +75,34 @@ public class HybridSorting implements SortingAlgorithm {
 	}	
 	
 	public static void mergeSort(int[] arr, ArrayList<Integer> runIndex) {
-		//System.out.println("Array after QuickSort: " + Arrays.toString(arr));
 		boolean odd = false;
 		int odd_value = 0;
+
 		if (runIndex.isEmpty()) {
 			return;
 		}
+
 		if (runIndex.size() % 2 == 1) {
 			odd = true;	
 			odd_value = runIndex.remove(runIndex.size() - 1);
 		}
-		try {
-			/*
-			while (runIndex.size() > 2) {
-				for (int i = 0; i < runIndex.size() - 1; i++) {
-					merge(arr, runIndex.get(i), runIndex.get(i + 1), runIndex.get(i + 1), runIndex.get(i + 2));
-					runIndex.remove(i + 1);
-					i++;
-				}
+
+		while (runIndex.size() > 3) {
+			for (int i = 0; i < runIndex.size() - 2; i++) {
+				merge(arr, runIndex.get(i), runIndex.get(i + 1), runIndex.get(i + 1), runIndex.get(i + 2));
+				runIndex.remove(i + 1);
 			}
-			*/
-			while (runIndex.size() > 3) {
-				for (int i = 0; i < runIndex.size() - 2; i++) {
-				//	System.out.println("First Array: " + Arrays.toString(Arrays.copyOfRange(arr, runIndex.get(i), runIndex.get(i + 1))));
-				//	System.out.println("Second Array: " + Arrays.toString(Arrays.copyOfRange(arr, runIndex.get(i + 1), runIndex.get(i + 2))));
-					merge(arr, runIndex.get(i), runIndex.get(i + 1), runIndex.get(i + 1), runIndex.get(i + 2));
-				//	System.out.println("Final Array: " + Arrays.toString(Arrays.copyOfRange(arr, 0, runIndex.get(i + 2))));
-				//	System.out.println("Final sorted = " + Practice05Test.isSorted(Arrays.copyOfRange(arr, 0, runIndex.get(i + 2))));
-					
-					runIndex.remove(i + 1);
-				}
-			}
-			if (odd) {
-				merge(arr, runIndex.get(1), runIndex.get(2), runIndex.get(2), odd_value);
-				runIndex.remove(2);
-				merge(arr, runIndex.get(0), runIndex.get(1), runIndex.get(1), odd_value);
-				merge(arr, runIndex.get(0), odd_value, odd_value, arr.length);
-			} else {
-				merge(arr, runIndex.get(1), runIndex.get(2), runIndex.get(2), arr.length);
-				runIndex.remove(2);
-				merge(arr, runIndex.get(0), runIndex.get(1), runIndex.get(1), arr.length);
-			}
-		} catch (Exception e) {
-			System.out.println("Error in mergeSort");
-			System.out.println(e);
+		}
+
+		if (odd) {
+			merge(arr, runIndex.get(1), runIndex.get(2), runIndex.get(2), odd_value);
+			runIndex.remove(2);
+			merge(arr, runIndex.get(0), runIndex.get(1), runIndex.get(1), odd_value);
+			merge(arr, runIndex.get(0), odd_value, odd_value, arr.length);
+		} else {
+			merge(arr, runIndex.get(1), runIndex.get(2), runIndex.get(2), arr.length);
+			runIndex.remove(2);
+			merge(arr, runIndex.get(0), runIndex.get(1), runIndex.get(1), arr.length);
 		}
 	}
 	public static void merge(int[] arr, int left, int leftEnd, int right, int rightEnd) {
@@ -144,8 +124,6 @@ public class HybridSorting implements SortingAlgorithm {
 		while (rightCount < rightArr.length) {
 			a[target++] = rightArr[rightCount++];
 		}
-
-	
 	}
 
 }
